@@ -3,6 +3,9 @@ package it.epicode.Esercizio1;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "eventi")
 public class Evento {
@@ -14,16 +17,34 @@ public class Evento {
     private LocalDate dataEvento;
     @Column(length = 100, nullable = false)
     private String descrizione;
+    @Enumerated(EnumType.STRING)
+    private tipoEvento tipoEvento;
+    private int numeroMassimoPartecipanti;
+    @OneToMany(mappedBy = "evento")
+    private List<Partecipazione> partecipazioni = new ArrayList<>();
+    @ManyToOne
+    private Location location;
 
-    public Evento(String titolo, LocalDate dataEvento, String descrizione, tipoEvento tipoEvento, int numeroMassimoPartecipanti) {
+    public Evento() {
+    }
+
+    public Evento(Long id, String titolo, LocalDate dataEvento, String descrizione, tipoEvento tipoEvento, int numeroMassimoPartecipanti, List<Partecipazione> partecipazioni, Location location) {
+        this.id = id;
         this.titolo = titolo;
         this.dataEvento = dataEvento;
         this.descrizione = descrizione;
         this.tipoEvento = tipoEvento;
         this.numeroMassimoPartecipanti = numeroMassimoPartecipanti;
+        this.partecipazioni = partecipazioni;
+        this.location = location;
     }
 
-    public Evento() {
+    public List<Partecipazione> getPartecipazioni() {
+        return partecipazioni;
+    }
+
+    public void setPartecipazioni(List<Partecipazione> partecipazioni) {
+        this.partecipazioni = partecipazioni;
     }
 
     public Long getId() {
@@ -74,8 +95,15 @@ public class Evento {
         this.numeroMassimoPartecipanti = numeroMassimoPartecipanti;
     }
 
-    @Enumerated(EnumType.STRING)
-    private tipoEvento tipoEvento;
-    private int numeroMassimoPartecipanti;
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+
+
 
 }
